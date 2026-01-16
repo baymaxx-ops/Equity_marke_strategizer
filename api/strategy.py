@@ -545,6 +545,27 @@ async def calculate_strategy(request: CalculationRequest):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+@app.get("/api/debug")
+async def debug_system():
+    import os
+    import glob
+    cwd = os.getcwd()
+    try:
+        public_exists = os.path.exists("public")
+        public_contents = os.listdir("public") if public_exists else []
+        static_mount = static_dir
+    except Exception as e:
+        public_contents = str(e)
+        static_mount = str(e)
+
+    return {
+        "cwd": cwd,
+        "static_dir_variable": static_mount,
+        "public_exists": os.path.exists("public"),
+        "public_contents": public_contents,
+        "env_fred_key_present": bool(FRED_API_KEY) 
+    }
+
 @app.get("/")
 async def root():
     return FileResponse("public/index.html")

@@ -1,22 +1,15 @@
 {
   "version": 2,
-  "env": {
-    "PYTHONUNBUFFERED": "1"
-  },
-  "builds": [
+  "rewrites": [
     {
-      "src": "index.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "50mb",
-        "includeFiles": "public/**"
-      }
+      "source": "/(.*)",
+      "destination": "/index.py"
     }
   ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "index.py"
+  "functions": {
+    "index.py": {
+      "includeFiles": "public/**",
+      "maxDuration": 30
     }
-  ]
+  }
 }

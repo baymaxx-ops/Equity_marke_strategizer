@@ -644,8 +644,11 @@ import pathlib
 # Try multiple paths to find public directory (Vercel standard)
 static_dir = None
 current_dir = pathlib.Path(__file__).parent.parent
+
+# For Vercel serverless: includeFiles copies public to function root
 possible_paths = [
     current_dir / "public",
+    pathlib.Path("/var/task/public"),  # Vercel's function directory
     pathlib.Path("/vercel/path0/public"),
     pathlib.Path.cwd() / "public",
 ]
@@ -653,13 +656,16 @@ possible_paths = [
 for path in possible_paths:
     if path.exists():
         static_dir = str(path)
+        print(f"Found static directory at: {static_dir}")
         break
 
-# Fallback to relative path
+# Fallback
 if static_dir is None:
     static_dir = str(current_dir / "public")
+    print(f"Using fallback static directory: {static_dir}")
 
 try:
     app.mount("/static", StaticFiles(directory=static_dir), name="static")
+    print(f"Successfully mounted static files from: {static_dir}")
 except Exception as e:
-    print(f"Warning: Could not mount static files from {static_dir}: {e}")
+    print(f"ERROR: Could not mount static files from {static_dir}: {e}")

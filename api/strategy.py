@@ -547,7 +547,7 @@ async def calculate_strategy(request: CalculationRequest):
 
 @app.get("/")
 async def root():
-    return FileResponse("static/index.html")
+    return FileResponse("public/index.html")
 
 def get_financial_data(ticker: str):
     """Fetch quarterly financial data from Yahoo Finance with caching"""

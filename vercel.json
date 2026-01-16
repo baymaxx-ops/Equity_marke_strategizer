@@ -2,18 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/strategy.py",
+      "src": "requirements.txt",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/strategy.py"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/static/$1"
+      "dest": "api/strategy.py"
     }
   ]
 }

@@ -10,9 +10,20 @@
       "config": {
         "maxLambdaSize": "50mb"
       }
+    },
+    {
+      "src": "static/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=0, must-revalidate"
+      }
+    },
     {
       "src": "/(.*)",
       "dest": "index.py"

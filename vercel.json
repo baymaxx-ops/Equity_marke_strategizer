@@ -8,8 +8,19 @@
   ],
   "routes": [
     {
+      "src": "/static/(.*)",
+      "dest": "/static/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=3600"
+      }
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/strategy.py"
+    },
+    {
       "src": "/(.*)",
-      "dest": "api/strategy.py"
+      "dest": "/api/strategy.py"
     }
   ]
 }

@@ -639,5 +639,7 @@ async def get_financials(ticker: str):
 
 # Mount static files
 import os
-static_path = os.path.join(os.path.dirname(__file__), "..", "static")
-app.mount("/static", StaticFiles(directory=static_path), name="static")
+static_dir = "static"
+if not os.path.isabs(static_dir):
+    static_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "static")
+app.mount("/static", StaticFiles(directory=static_dir, check_dir=False), name="static")

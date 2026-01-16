@@ -1,15 +1,19 @@
 {
-  "version": 2,
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.py"
-    }
-  ],
-  "functions": {
-    "index.py": {
-      "includeFiles": "public/**",
-      "maxDuration": 30
-    }
-  }
+    "version": 2,
+    "builds": [
+        {
+            "src": "index.py",
+            "use": "@vercel/python",
+            "config": {
+                "maxLambdaSize": "50mb",
+                "includeFiles": "public/**"
+            }
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/index.py"
+        }
+    ]
 }

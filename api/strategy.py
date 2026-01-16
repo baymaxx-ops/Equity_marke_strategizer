@@ -641,13 +641,13 @@ async def get_financials(ticker: str):
 import os
 import pathlib
 
-# Try multiple paths to find static directory
+# Try multiple paths to find public directory (Vercel standard)
 static_dir = None
 current_dir = pathlib.Path(__file__).parent.parent
 possible_paths = [
-    current_dir / "static",
-    pathlib.Path("/vercel/path0/static"),
-    pathlib.Path.cwd() / "static",
+    current_dir / "public",
+    pathlib.Path("/vercel/path0/public"),
+    pathlib.Path.cwd() / "public",
 ]
 
 for path in possible_paths:
@@ -657,7 +657,7 @@ for path in possible_paths:
 
 # Fallback to relative path
 if static_dir is None:
-    static_dir = str(current_dir / "static")
+    static_dir = str(current_dir / "public")
 
 try:
     app.mount("/static", StaticFiles(directory=static_dir), name="static")

@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed - Market Analysis Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oregano&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: #1a1f2e;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Market Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(102, 126, 234, 0.08) 0%, 
+                rgba(118, 75, 162, 0.08) 25%,
+                rgba(102, 126, 234, 0.05) 50%,
+                rgba(118, 75, 162, 0.08) 75%,
+                rgba(102, 126, 234, 0.08) 100%);
+            animation: marketFlow 20s ease-in-out infinite;
+            z-index: 0;
+            opacity: 0.8;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(102, 126, 234, 0.03) 2px, rgba(102, 126, 234, 0.03) 4px),
+                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(118, 75, 162, 0.03) 2px, rgba(118, 75, 162, 0.03) 4px);
+            z-index: 0;
+            opacity: 0.5;
+        }
+
+        @keyframes marketFlow {
+            0% { filter: brightness(1); }
+            50% { filter: brightness(1.05); }
+            100% { filter: brightness(1); }
+        }
+
+        /* Splash Screen */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: splashFadeOut 0.8s ease-in forwards;
+            animation-delay: 1.5s;
+            overflow: hidden;
+        }
+
+        .chart-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .trending-line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            height: 70%;
+            opacity: 0.8;
+        }
+
+        .trending-line path {
+            fill: none;
+            stroke: #4ade80;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: drop-shadow(0 0 10px rgba(74, 222, 128, 0.5));
+            animation: drawLine 3s ease-in-out infinite;
+        }
+
+        @keyframes drawLine {
+            0%, 100% {
+                opacity: 0.6;
+                stroke-width: 3;
+            }
+            50% {
+                opacity: 1;
+                stroke-width: 4;
+            }
+        }
+
+        .chart-line {
+            position: absolute;
+            height: 1px;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, rgba(74, 222, 128, 0.2), transparent);
+            animation: chartMove 4s linear infinite;
+        }
+
+        .chart-line:nth-child(2) { top: 20%; animation-delay: 0s; }
+        .chart-line:nth-child(3) { top: 40%; animation-delay: 1.5s; }
+        .chart-line:nth-child(4) { top: 60%; animation-delay: 3s; }
+        .chart-line:nth-child(5) { top: 80%; animation-delay: 2s; }
+
+        @keyframes chartMove {
+            0% { transform: translateX(-100%); opacity: 0; }
+            50% { opacity: 0.3; }
+            100% { transform: translateX(100%); opacity: 0; }
+        }
+
+        .splash-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            z-index: 1;
+            opacity: 0.4;
+        }
+
+        .splash-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 2;
+        }
+
+        .splash-logo {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: logoScaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            z-index: 3;
+        }
+
+        .splash-logo svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+        }
+
+        @keyframes logoScaleIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) rotateZ(-10deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotateZ(0deg);
+            }
+        }
+
+        @keyframes splashFadeOut {
+            0% {
+                opacity: 1;
+                visibility: visible;
+            }
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        /* Ensure content is above background */
+        header, main, .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 31, 46, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            padding: 1.2rem 2rem;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            letter-spacing: 0;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        nav {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #a0a0a0;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #667eea;
+        }
+
+        /* Main Container */
+        main {
+            margin-top: 80px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero h1 {
+            font-family: 'Oregano', cursive;
+            font-size: clamp(3rem, 12vw, 6rem);
+            font-weight: 400;
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+            line-height: 1.2;
+            display: block;
+            color: #ffffff;
+            min-height: 6rem;
+        }
+
+        .hero h1 span {
+            display: inline-block;
+            opacity: 0;
+            animation: textReveal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            color: #ffffff;
+        }
+
+        @keyframes textReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+                filter: blur(4px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: #b0b0b0;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        /* Section Styles */
+        section {
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #888;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        /* Company Selector */
+        .company-selector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+        .selector-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            justify-items: center;
+        }
+
+        .selector-grid .form-group {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        #companyDropdown {
+            max-height: 300px;
+            overflow-y: auto;
+            width: 100%;
+        }
+
+        #companyDropdown optgroup {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        /* Form Section */
+        #formSection {
+            display: none;
+        }
+
+        #formSection.visible {
+            display: block;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: #667eea;
+            font-weight: bold;
+            cursor: help;
+            position: relative;
+        }
+
+        .info-icon:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a1a;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            z-index: 100;
+            width: max-content;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.95rem;
+            border: 2px solid #3a4456;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: #2a3447;
+            color: #ffffff;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: #888888;
+            opacity: 1;
+        }
+
+        .form-group input::-webkit-autofill,
+        .form-group input::-webkit-autofill:hover,
+        .form-group input::-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0 30px #2a3447 inset !important;
+            -webkit-text-fill-color: #ffffff !important;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        button {
+            padding: 1.1rem 2.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #analyzeBtn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex: 1;
+            max-width: 300px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        #analyzeBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        #analyzeBtn:active {
+            transform: translateY(0);
+        }
+
+        #analyzeBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Results Section */
+        #resultsSection {
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        #resultsSection.visible {
+            display: block;
+        }
+
+        .results-header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .results-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .results-header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .metric-card {
+            background: #ffffff;
+            border: 2px solid #f0f0f0;
+            padding: 2rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            animation: fadeInScale 0.6s ease;
+        }
+
+        .metric-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: #999;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 0.75rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            word-break: break-word;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            margin-bottom: 4rem;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .chart-card {
+            background: #ffffff;
+            border: 2px solid #f0f0f0;
+            padding: 2rem;
+            border-radius: 12px;
+            animation: fadeInScale 0.6s ease 0.2s both;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Table Section */
+        .table-section {
+            margin-bottom: 4rem;
+        }
+
+        .table-card {
+            background: #252d3d;
+            border: 2px solid #3a4456;
+            border-radius: 12px;
+            overflow: hidden;
+            animation: fadeInScale 0.6s ease 0.3s both;
+        }
+
+        .table-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 2rem;
+            border-bottom: 1px solid #3a4456;
+            color: #ffffff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1.2rem;
+            text-align: left;
+            border-bottom: 1px solid #3a4456;
+            color: #e0e0e0;
+        }
+
+        th {
+            background: #1f2839;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #a0a0a0;
+        }
+
+        td {
+            color: #ffffff;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Loading Spinner */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            display: none;
+        }
+
+        .loading.visible {
+            display: block;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .spinner {
+            border: 4px solid #f0f0f0;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .back-btn {
+            background: #f0f0f0;
+            color: #1a1a1a;
+            padding: 1rem 2rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            background: #e0e0e0;
+        }
+
+        /* Advanced Tools Button */
+        .advanced-tools-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            white-space: nowrap;
+        }
+
+        .advanced-tools-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .advanced-tools-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.4s ease;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            background: white;
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            color: #1a1a1a;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .metrics-modal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .metric-modal-card {
+            background: #fafafa;
+            border: 1px solid #f0f0f0;
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .metric-modal-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+        }
+
+        .metric-modal-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #667eea;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .metric-tooltip-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1.5px solid #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #667eea;
+            font-weight: bold;
+            cursor: help;
+            position: relative;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .metric-tooltip-icon:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .metric-tooltip-icon:hover ~ .metric-tooltip-content,
+        .metric-tooltip-content:hover {
+            display: block !important;
+            animation: tooltipFade 0.2s ease;
+        }
+
+        .metric-tooltip-content {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 0.75rem);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a1a;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            white-space: normal;
+            z-index: 3000;
+            width: 200px;
+            text-align: left;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            line-height: 1.4;
+            font-weight: 400;
+            text-transform: none;
+            letter-spacing: 0;
+            pointer-events: auto;
+        }
+
+        .metric-tooltip-content::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #1a1a1a;
+        }
+
+        .metric-modal-card:hover .metric-tooltip-content {
+            display: block;
+            animation: tooltipFade 0.2s ease;
+        }
+
+        @keyframes tooltipFade {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* Financials Modal */
+        .financials-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #3a4456;
+        }
+
+        .financials-section:last-child {
+            border-bottom: none;
+        }
+
+        .financials-section h4 {
+            color: #667eea;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 1rem;
+        }
+
+        .financials-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .financials-metric-card {
+            background: #252d3d;
+            border: 1px solid #3a4456;
+            padding: 1.25rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .financials-metric-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+        }
+
+        .financials-metric-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #667eea;
+            margin-bottom: 0.75rem;
+        }
+
+        .financials-metric-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .financials-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .financials-table th {
+            background: #252d3d;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #3a4456;
+            color: #ffffff;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .financials-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #3a4456;
+            color: #ffffff;
+        }
+
+        .financials-table tr {
+            background: #1a2332;
+        }
+
+        .financials-table tr:hover {
+            background: #252d3d;
+        }
+
+        .financials-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .metric-modal-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-modal-description {
+            font-size: 0.85rem;
+            color: #667eea;
+            line-height: 1.4;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: #fafafa;
+            border-top: 1px solid #f0f0f0;
+            padding: 3rem 2rem;
+            text-align: center;
+            color: #999;
+            font-size: 0.9rem;
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 1.5rem;
+            }
+
+            .logo {
+                font-size: 1.4rem;
+            }
+
+            nav {
+                gap: 1.5rem;
+                font-size: 0.85rem;
+            }
+
+            .hero {
+                padding: 3rem 1.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .selector-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            #analyzeBtn {
+                max-width: 100%;
+            }
+
+            .container {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div class="splash-screen">
+        <!-- Animated Chart Background -->
+        <div class="chart-animation">
+            <!-- Upward Trending Line -->
+            <svg class="trending-line" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                <path d="M 0 350 Q 50 320 100 280 T 200 240 T 300 180 T 400 140 T 500 120 T 600 90 T 700 60 L 800 40" />
+            </svg>
+            <div class="chart-line"></div>
+            <div class="chart-line"></div>
+            <div class="chart-line"></div>
+            <div class="chart-line"></div>
+        </div>
+        
+        <div class="splash-overlay"></div>
+        
+        <div class="splash-logo">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- Circle outline -->
+                <circle cx="100" cy="100" r="95" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.3"/>
+                
+                <!-- Plant leaves -->
+                <path d="M 100 60 Q 95 45 85 40 Q 90 50 100 65" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+                <path d="M 100 60 Q 105 45 115 40 Q 110 50 100 65" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+                <line x1="100" y1="65" x2="100" y2="100" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+                
+                <!-- Upward trending arrow/chart -->
+                <polyline points="75,120 85,105 100,115 115,90" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M 115 90 L 125 95 L 120 80" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                
+                <!-- D curve -->
+                <line x1="130" y1="80" x2="130" y2="140" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+                <path d="M 130 85 Q 155 100 130 135" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                    <!-- Circle outline -->
+                    <circle cx="100" cy="100" r="95" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.3"/>
+                    
+                    <!-- Plant leaves -->
+                    <path d="M 100 60 Q 95 45 85 40 Q 90 50 100 65" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M 100 60 Q 105 45 115 40 Q 110 50 100 65" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="100" y1="65" x2="100" y2="100" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+                    
+                    <!-- Upward trending arrow/chart -->
+                    <polyline points="75,120 85,105 100,115 115,90" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M 115 90 L 125 95 L 120 80" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    
+                    <!-- D curve -->
+                    <line x1="130" y1="80" x2="130" y2="140" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M 130 85 Q 155 100 130 135" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <nav>
+                <a href="https://linkedin.com/in/smitpatel22052002abcd" target="_blank" rel="noopener noreferrer">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 id="animatedTitle">Seed</h1>
+            <p>Advanced equity strategy analysis with intelligent market regime detection and predictive performance insights.</p>
+        </section>
+
+        <div class="container">
+            <!-- Company Selector -->
+            <section class="company-selector">
+                <span class="section-label">Step 01 — Select Ticker</span>
+                <div class="selector-grid">
+                    <div class="form-group">
+                        <select id="companyDropdown" required>
+                            <option value="">Choose a company...</option>
+                            <optgroup label="Technology">
+                                <option value="AAPL">Apple Inc. (AAPL)</option>
+                                <option value="MSFT">Microsoft Corporation (MSFT)</option>
+                                <option value="GOOGL">Alphabet Inc. (GOOGL)</option>
+                                <option value="AMZN">Amazon.com Inc. (AMZN)</option>
+                                <option value="NVDA">NVIDIA Corporation (NVDA)</option>
+                                <option value="META">Meta Platforms Inc. (META)</option>
+                                <option value="TSLA">Tesla Inc. (TSLA)</option>
+                            </optgroup>
+                            <optgroup label="Finance">
+                                <option value="JPM">JPMorgan Chase & Co. (JPM)</option>
+                                <option value="BAC">Bank of America (BAC)</option>
+                                <option value="WFC">Wells Fargo & Company (WFC)</option>
+                                <option value="GS">The Goldman Sachs Group (GS)</option>
+                            </optgroup>
+                            <optgroup label="Healthcare">
+                                <option value="JNJ">Johnson & Johnson (JNJ)</option>
+                                <option value="UNH">UnitedHealth Group (UNH)</option>
+                                <option value="PFE">Pfizer Inc. (PFE)</option>
+                                <option value="MRK">Merck & Co. (MRK)</option>
+                                <option value="ABBV">AbbVie Inc. (ABBV)</option>
+                            </optgroup>
+                            <optgroup label="Consumer">
+                                <option value="WMT">Walmart Inc. (WMT)</option>
+                                <option value="HD">The Home Depot (HD)</option>
+                                <option value="MCD">McDonald's Corporation (MCD)</option>
+                                <option value="NKE">Nike Inc. (NKE)</option>
+                                <option value="SBUX">Starbucks Corporation (SBUX)</option>
+                            </optgroup>
+                            <optgroup label="Energy & Utilities">
+                                <option value="XOM">Exxon Mobil Corporation (XOM)</option>
+                                <option value="CVX">Chevron Corporation (CVX)</option>
+                                <option value="NEE">NextEra Energy (NEE)</option>
+                                <option value="DUK">Duke Energy Corporation (DUK)</option>
+                            </optgroup>
+                            <optgroup label="Entertainment">
+                                <option value="NFLX">Netflix Inc. (NFLX)</option>
+                                <option value="DIS">The Walt Disney Company (DIS)</option>
+                                <option value="CMCSA">Comcast Corporation (CMCSA)</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Form Section -->
+            <section id="formSection">
+                <span class="section-label">Step 02 — Configure Analysis</span>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>
+                            Stock Ticker
+                            <span class="info-icon" data-tooltip="Enter the stock ticker symbol (e.g., AAPL)">?</span>
+                        </label>
+                        <input type="text" id="ticker" placeholder="e.g., AAPL" required>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Market
+                            <span class="info-icon" data-tooltip="Benchmark index for market regime (SPY for S&P 500)">?</span>
+                        </label>
+                        <select id="market" required>
+                            <option value="">Select Market</option>
+                            <option value="SPY">SPY - S&P 500</option>
+                            <option value="QQQ">QQQ - Nasdaq</option>
+                            <option value="IWM">IWM - Russell 2000</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Start Date
+                            <span class="info-icon" data-tooltip="Begin date for historical analysis">?</span>
+                        </label>
+                        <input type="date" id="startDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            End Date
+                            <span class="info-icon" data-tooltip="End date for historical analysis">?</span>
+                        </label>
+                        <input type="date" id="endDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Risk-Free Rate (%)
+                            <span class="info-icon" data-tooltip="Annual risk-free rate for CAPM calculation">?</span>
+                        </label>
+                        <input type="number" id="riskFreeRate" placeholder="3.0" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Lookback Window (days)
+                            <span class="info-icon" data-tooltip="Days for moving average calculation (20-126)">?</span>
+                        </label>
+                        <input type="number" id="window" placeholder="63" min="20" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Strike Price ($)
+                            <span class="info-icon" data-tooltip="Option strike price for Black-Scholes (optional)">?</span>
+                        </label>
+                        <input type="number" id="strike" placeholder="e.g., 150" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Days to Expiry
+                            <span class="info-icon" data-tooltip="Days until option expiration">?</span>
+                        </label>
+                        <input type="number" id="daysToExpiry" placeholder="30" min="1" step="1" required>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button id="analyzeBtn">Analyze</button>
+                </div>
+            </section>
+
+            <!-- Loading Section -->
+            <section class="loading" id="loadingSection">
+                <div class="spinner"></div>
+                <div class="loading-text">Analyzing market data...</div>
+            </section>
+
+            <!-- Results Section -->
+            <section id="resultsSection">
+                <div class="results-header">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <h2>Analysis Results</h2>
+                            <p id="resultsSubtitle">Comprehensive market analysis and strategy performance</p>
+                        </div>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <button id="financialsBtn" class="advanced-tools-btn">📊 Financials</button>
+                            <button id="advancedToolsBtn" class="advanced-tools-btn">🔧 Advanced Tools</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Metrics Grid -->
+                <div class="metrics-grid" id="metricsContainer"></div>
+
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-grid">
+                        <div class="chart-card">
+                            <div class="chart-title">Strategy Performance</div>
+                            <div class="chart-container">
+                                <img id="equityCurveChart" style="width: 100%; height: auto;" alt="Strategy Performance Chart">
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-title">Drawdown Analysis</div>
+                            <div class="chart-container">
+                                <img id="drawdownChart" style="width: 100%; height: auto;" alt="Drawdown Analysis Chart">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backtest Table -->
+                <div class="table-section">
+                    <div class="table-card">
+                        <div class="table-title">Market Regime Analysis</div>
+                        <table id="backtestTable">
+                            <thead>
+                                <tr>
+                                    <th>Regime</th>
+                                    <th>Return (%)</th>
+                                    <th>Days</th>
+                                    <th>Strategy Return (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="backtestBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- CTA Section -->
+                <div class="cta-section">
+                    <button class="back-btn" onclick="resetAnalysis()">← Back to Analysis</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Advanced Tools Modal -->
+    <div id="advancedToolsModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color: #667eea; font-weight: 700;">Advanced Performance Metrics</h3>
+                <button id="closeModalBtn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="metrics-modal-grid" id="advancedMetricsContainer">
+                    <!-- Metrics will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Financials Modal -->
+    <div id="financialsModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 1000px;">
+            <div class="modal-header">
+                <h3 id="financialsTitle" style="color: #667eea; font-weight: 700;">Company Financials</h3>
+                <button id="closeFinancialsBtn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="financialsLoading" style="text-align: center; padding: 2rem;">
+                    <div class="spinner" style="margin: 0 auto 1rem; border-width: 3px;"></div>
+                    <p>Loading financial data...</p>
+                </div>
+                <div id="financialsContent" style="display: none;">
+                    <div style="background: #2a3447; border-left: 4px solid #667eea; padding: 1rem; margin-bottom: 1.5rem; border-radius: 4px; font-size: 0.9rem; color: #e0e0e0;">
+                        <strong style="color: #ffffff;">ⓘ Data Source:</strong> Quarterly financial data and analyst predictions from Yahoo Finance API. Data is cached for 1 hour to optimize performance. Cache timestamp shown below.
+                    </div>
+                    
+                    <div id="cacheInfo" style="color: #ffffff; font-size: 0.85rem; margin-bottom: 1.5rem; font-weight: 500;"></div>
+                    
+                    <div class="financials-section">
+                        <h4 style="margin-bottom: 1rem; font-size: 1.1rem; font-weight: 600;">Key Metrics</h4>
+                        <div class="financials-metrics-grid" id="keyMetricsContainer"></div>
+                    </div>
+                    
+                    <div class="financials-section">
+                        <h4 style="margin-bottom: 1rem; font-size: 1.1rem; font-weight: 600;">Analyst Predictions</h4>
+                        <div class="financials-metrics-grid" id="analystDataContainer"></div>
+                    </div>
+                    
+                    <div class="financials-section">
+                        <h4 style="margin-bottom: 1rem; font-size: 1.1rem; font-weight: 600;">Quarterly Performance</h4>
+                        <table class="financials-table">
+                            <thead>
+                                <tr>
+                                    <th>Quarter</th>
+                                    <th>Revenue</th>
+                                    <th>Net Income</th>
+                                    <th>Operating Cash Flow</th>
+                                    <th>EPS (TTM)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="quarterlyDataContainer"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Tools Modal -->
+    <div id="advancedToolsModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color: #667eea; font-weight: 700;">Advanced Performance Metrics</h3>
+                <button id="closeModalBtn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="metrics-modal-grid" id="advancedMetricsContainer">
+                    <!-- Metrics will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Equity Strategy Platform. All rights reserved.</p>
+    </footer>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

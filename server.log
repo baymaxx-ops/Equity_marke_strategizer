@@ -1,0 +1,140 @@
+INFO:     Started server process [8011]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+INFO:     ::1:59632 - "HEAD / HTTP/1.1" 405 Method Not Allowed
+INFO:     ::1:59643 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:59643 - "GET /static/script.js HTTP/1.1" 200 OK
+INFO:     ::1:59647 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:59654 - "GET /api/financials/AAPL HTTP/1.1" 200 OK
+INFO:     ::1:59683 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:59683 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:59686 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:59742 - "GET /api/financials/MSFT HTTP/1.1" 200 OK
+INFO:     ::1:59757 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:59757 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:59758 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:59758 - "GET /api/financials/MSFT HTTP/1.1" 200 OK
+INFO:     ::1:59808 - "GET /api/financials/MSFT HTTP/1.1" 200 OK
+INFO:     ::1:59808 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:59811 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:59811 - "GET /api/financials/MSFT HTTP/1.1" 200 OK
+INFO:     ::1:59868 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:59868 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:59870 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:59877 - "GET /api/financials/MSFT HTTP/1.1" 200 OK
+INFO:     ::1:59919 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:59919 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:59921 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:59931 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:59933 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:59933 - "GET /api/financials/MSFT HTTP/1.1" 200 OK
+INFO:     ::1:59955 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:59957 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:59964 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:59964 - "GET /api/financials/GOOGL HTTP/1.1" 200 OK
+INFO:     ::1:59973 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:59974 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:59974 - "GET /api/financials/MSFT HTTP/1.1" 200 OK
+INFO:     ::1:59988 - "GET /api/financials/MSFT HTTP/1.1" 200 OK
+INFO:     ::1:60033 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:60033 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:60034 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:60034 - "GET /api/financials/MSFT HTTP/1.1" 200 OK
+INFO:     ::1:60142 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:60142 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:60142 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:60149 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:60158 - "GET /api/financials/GOOGL HTTP/1.1" 200 OK
+INFO:     ::1:60184 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:60184 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:60184 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:60273 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:60273 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:60273 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:60276 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:60276 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:60289 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:60353 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:60353 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:60353 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:60355 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:60387 - "GET /api/financials/GOOGL HTTP/1.1" 200 OK
+INFO:     ::1:60388 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:60399 - "GET /api/financials/GOOGL HTTP/1.1" 200 OK
+INFO:     ::1:60399 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:60399 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:60437 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:60447 - "GET /api/financials/AAPL HTTP/1.1" 200 OK
+INFO:     ::1:60466 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:60466 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:60469 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:60469 - "GET /api/financials/MSFT HTTP/1.1" 200 OK
+INFO:     ::1:60584 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:60584 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:60584 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:60625 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:60625 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:60630 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:60630 - "GET /api/financials/MSFT HTTP/1.1" 200 OK
+INFO:     ::1:60641 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:60650 - "GET /api/financials/MSFT HTTP/1.1" 200 OK
+INFO:     ::1:60655 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:60655 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:60669 - "GET /api/financials/MSFT HTTP/1.1" 200 OK
+INFO:     ::1:60784 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:60784 - "GET /static/script.js HTTP/1.1" 200 OK
+INFO:     ::1:60784 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:60786 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:60793 - "GET /api/financials/GOOGL HTTP/1.1" 200 OK
+INFO:     ::1:60795 - "POST /api/calculate HTTP/1.1" 200 OK
+INFO:     ::1:60802 - "GET /api/financials/GOOGL HTTP/1.1" 200 OK
+INFO:     ::1:60845 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:60845 - "GET /static/script.js HTTP/1.1" 200 OK
+INFO:     ::1:60845 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:60853 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:60853 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:60917 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:60917 - "GET /static/script.js HTTP/1.1" 200 OK
+INFO:     ::1:60917 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:60921 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:60921 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:60925 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:60925 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:60975 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:60975 - "GET /static/script.js HTTP/1.1" 200 OK
+INFO:     ::1:60975 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:60997 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:60997 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:60997 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:61005 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:61005 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:61005 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:61049 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:61049 - "GET /static/script.js HTTP/1.1" 200 OK
+INFO:     ::1:61049 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:61051 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:61051 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:61051 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:61076 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:61076 - "GET /static/script.js HTTP/1.1" 200 OK
+INFO:     ::1:61076 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:61126 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:61126 - "GET /static/script.js HTTP/1.1" 200 OK
+INFO:     ::1:61126 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:61198 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:61198 - "GET /static/script.js HTTP/1.1" 200 OK
+INFO:     ::1:61198 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:61222 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:61222 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:61222 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:61240 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:61240 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:61240 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     ::1:61287 - "GET / HTTP/1.1" 200 OK
+INFO:     ::1:61287 - "GET /static/script.js HTTP/1.1" 304 Not Modified
+INFO:     ::1:61288 - "GET /static/market-chart.mp4 HTTP/1.1" 404 Not Found
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [8011]

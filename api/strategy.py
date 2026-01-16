@@ -17,6 +17,11 @@ import ssl
 import urllib.request
 import time
 from datetime import datetime, timedelta
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = FastAPI()
 
@@ -25,7 +30,7 @@ financial_cache = {}
 CACHE_DURATION = 3600  # 1 hour in seconds
 
 # Initialize FRED API (get free key at https://fred.stlouisfed.org/docs/api/)
-FRED_API_KEY = "28a2040fc9b595e26e33dbb8c3aeac57"
+FRED_API_KEY = os.getenv("FRED_API_KEY", "")
 try:
     # Bypass SSL verification for FRED API (workaround for certificate issues)
     ssl._create_default_https_context = ssl._create_unverified_context
